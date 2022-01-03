@@ -1,0 +1,6 @@
+apiVersion: meridio.nordix.org/v1beta1
+kind: Trench
+metadata:
+  name: trench-sample
+spec:
+  family: ipv4

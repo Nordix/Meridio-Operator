@@ -1,6 +1,6 @@
 apiVersion: meridio.nordix.org/v1alpha1
 kind: Trench
 metadata:
-  name: trench-a
+  name: trench-b
 spec:
   ip-family: dualstack

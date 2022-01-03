@@ -39,6 +39,7 @@ import (
 	streamcontroller "github.com/nordix/meridio-operator/controllers/stream"
 	trenchcontroller "github.com/nordix/meridio-operator/controllers/trench"
 
+	meridiov1beta1 "github.com/nordix/meridio-operator/api/v1beta1"
 	"github.com/nordix/meridio-operator/controllers/version"
 	vipcontroller "github.com/nordix/meridio-operator/controllers/vip"
 	//+kubebuilder:scaffold:imports
@@ -53,6 +54,7 @@ func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
 
 	utilruntime.Must(meridiov1alpha1.AddToScheme(scheme))
+	utilruntime.Must(meridiov1beta1.AddToScheme(scheme))
 	//+kubebuilder:scaffold:scheme
 }
 
@@ -184,6 +186,14 @@ func main() {
 	}
 	if err = (&meridiov1alpha1.Flow{}).SetupWebhookWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create webhook", "webhook", "Flow")
+		os.Exit(1)
+	}
+	if err = (&meridiov1beta1.Trench{}).SetupWebhookWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create webhook", "webhook", "Trench")
+		os.Exit(1)
+	}
+	if err = (&meridiov1alpha1.Trench{}).SetupWebhookWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create webhook", "webhook", "Trench")
 		os.Exit(1)
 	}
 	//+kubebuilder:scaffold:builder

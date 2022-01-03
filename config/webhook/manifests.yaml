@@ -12,6 +12,26 @@ webhooks:
     service:
       name: webhook-service
       namespace: system
+      path: /mutate-meridio-nordix-org-v1alpha1-trench
+  failurePolicy: Fail
+  name: mtrench.kb.io
+  rules:
+  - apiGroups:
+    - meridio.nordix.org
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - trenches
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: system
       path: /mutate-meridio-nordix-org-v1alpha1-attractor
   failurePolicy: Fail
   name: mattractor.kb.io
@@ -106,15 +126,23 @@ webhooks:
     resources:
     - streams
   sideEffects: None
+
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  creationTimestamp: null
+  name: validating-webhook-configuration
+webhooks:
 - admissionReviewVersions:
   - v1
   clientConfig:
     service:
       name: webhook-service
       namespace: system
-      path: /mutate-meridio-nordix-org-v1alpha1-trench
+      path: /validate-meridio-nordix-org-v1alpha1-trench
   failurePolicy: Fail
-  name: mtrench.kb.io
+  name: vtrench.kb.io
   rules:
   - apiGroups:
     - meridio.nordix.org
@@ -126,14 +154,6 @@ webhooks:
     resources:
     - trenches
   sideEffects: None
-
----
-apiVersion: admissionregistration.k8s.io/v1
-kind: ValidatingWebhookConfiguration
-metadata:
-  creationTimestamp: null
-  name: validating-webhook-configuration
-webhooks:
 - admissionReviewVersions:
   - v1
   clientConfig:
@@ -233,26 +253,6 @@ webhooks:
     - UPDATE
     resources:
     - streams
-  sideEffects: None
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    service:
-      name: webhook-service
-      namespace: system
-      path: /validate-meridio-nordix-org-v1alpha1-trench
-  failurePolicy: Fail
-  name: vtrench.kb.io
-  rules:
-  - apiGroups:
-    - meridio.nordix.org
-    apiVersions:
-    - v1alpha1
-    operations:
-    - CREATE
-    - UPDATE
-    resources:
-    - trenches
   sideEffects: None
 - admissionReviewVersions:
   - v1

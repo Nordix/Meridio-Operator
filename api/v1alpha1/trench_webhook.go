@@ -17,15 +17,8 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"fmt"
-	"strings"
-
-	apierrors "k8s.io/apimachinery/pkg/api/errors"
-	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/apimachinery/pkg/util/validation/field"
 	ctrl "sigs.k8s.io/controller-runtime"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
-	"sigs.k8s.io/controller-runtime/pkg/webhook"
 )
 
 // log is for logging in this package.
@@ -37,80 +30,4 @@ func (r *Trench) SetupWebhookWithManager(mgr ctrl.Manager) error {
 		Complete()
 }
 
-//+kubebuilder:webhook:path=/mutate-meridio-nordix-org-v1alpha1-trench,mutating=true,failurePolicy=fail,sideEffects=None,groups=meridio.nordix.org,resources=trenches,verbs=create;update,versions=v1alpha1,name=mtrench.kb.io,admissionReviewVersions=v1
-
-var _ webhook.Defaulter = &Trench{}
-
-// Default implements webhook.Defaulter so a webhook will be registered for the type
-func (r *Trench) Default() {
-	trenchlog.Info("default", "name", r.Name)
-	if r.Spec.IPFamily == "" {
-		r.Spec.IPFamily = string(Dualstack)
-	} else {
-		r.Spec.IPFamily = strings.ToLower(r.Spec.IPFamily)
-	}
-}
-
-//+kubebuilder:webhook:path=/validate-meridio-nordix-org-v1alpha1-trench,mutating=false,failurePolicy=fail,sideEffects=None,groups=meridio.nordix.org,resources=trenches,verbs=create;update,versions=v1alpha1,name=vtrench.kb.io,admissionReviewVersions=v1
-
-var _ webhook.Validator = &Trench{}
-
-// ValidateCreate implements webhook.Validator so a webhook will be registered for the type
-func (r *Trench) ValidateCreate() error {
-	trenchlog.Info("validate create", "name", r.Name)
-	return r.validateTrench()
-}
-
-// ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
-func (r *Trench) ValidateUpdate(old runtime.Object) error {
-	trenchlog.Info("validate update", "name", r.Name)
-	err := r.validateUpdate(old)
-	if err != nil {
-		return err
-	}
-	return r.validateTrench()
-}
-
-// ValidateDelete implements webhook.Validator so a webhook will be registered for the type
-func (r *Trench) ValidateDelete() error {
-	trenchlog.Info("validate delete", "name", r.Name)
-	return nil
-}
-
-func (r *Trench) validateTrench() error {
-	var allErrs field.ErrorList
-
-	if err := r.validateSpec(); err != nil {
-		allErrs = append(allErrs, err...)
-	}
-
-	if len(allErrs) == 0 {
-		return nil
-	}
-
-	return apierrors.NewInvalid(r.GroupKind(), r.Name, allErrs)
-}
-
-func (r *Trench) validateSpec() field.ErrorList {
-	var allErrs field.ErrorList
-	if !IPFamily(r.Spec.IPFamily).IsValid() {
-		allErrs = append(allErrs, field.Invalid(field.NewPath("spec").Child("ip-family"), r.Spec.IPFamily, "invalid IP family"))
-	}
-	if len(allErrs) == 0 {
-		return nil
-	}
-	return allErrs
-}
-
-func (r *Trench) validateUpdate(old runtime.Object) error {
-	typedOld, ok := old.(*Trench)
-	if !ok {
-		return apierrors.NewBadRequest(fmt.Sprintf("expected a %s got a %T", r.GroupVersionKind().Kind, typedOld))
-	}
-
-	if r.Spec.IPFamily != typedOld.Spec.IPFamily {
-		return apierrors.NewForbidden(r.GroupResource(),
-			r.Name, field.Forbidden(field.NewPath("spec", "ip-family"), "update on ip-family is forbidden"))
-	}
-	return nil
-}
+// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!

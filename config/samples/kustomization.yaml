@@ -7,4 +7,5 @@ resources:
 - meridio_v1alpha1_conduit.yaml
 - meridio_v1alpha1_stream.yaml
 - meridio_v1alpha1_flow.yaml
+- meridio_v1beta1_trench.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples
