@@ -12,6 +12,7 @@ spec:
   template:
     metadata:
       labels:
+        spiffe.io/spiffe-id: "true"
         app: proxy
     spec:
       serviceAccountName: # to be filled by operator

@@ -13,6 +13,7 @@ spec:
   template:
     metadata:
       labels:
+        spiffe.io/spiffe-id: "true"
         app: lb-fe
     spec:
       serviceAccountName: # to be filled by operator
