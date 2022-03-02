@@ -112,7 +112,7 @@ func (c *ConfigMap) getDesiredStatus() (*corev1.ConfigMap, error) {
 	configmap.ObjectMeta.Name = common.ConfigMapName(c.trench)
 	configmap.ObjectMeta.Namespace = c.trench.ObjectMeta.Namespace
 
-	data, err := c.getAllData()
+	data, err := c.getAllData([]*reader.Stream{})
 	if err != nil {
 		return nil, err
 	}
@@ -122,7 +122,11 @@ func (c *ConfigMap) getDesiredStatus() (*corev1.ConfigMap, error) {
 
 func (c *ConfigMap) getReconciledDesiredStatus(cm *corev1.ConfigMap) (*corev1.ConfigMap, error) {
 	ret := cm.DeepCopy()
-	data, err := c.getAllData()
+	_, _, streams, _, _, _, _, err := reader.UnmarshalConfig(ret.Data)
+	if err != nil {
+		return nil, err
+	}
+	data, err := c.getAllData(streams)
 	if err != nil {
 		return nil, err
 	}
@@ -130,7 +134,7 @@ func (c *ConfigMap) getReconciledDesiredStatus(cm *corev1.ConfigMap) (*corev1.Co
 	return ret, nil
 }
 
-func (c *ConfigMap) getAllData() (map[string]string, error) {
+func (c *ConfigMap) getAllData(streams []*reader.Stream) (map[string]string, error) {
 	tdata, err := c.getTrenchData()
 	if err != nil {
 		return nil, err
@@ -156,7 +160,7 @@ func (c *ConfigMap) getAllData() (map[string]string, error) {
 		return nil, err
 	}
 
-	stream, err := c.getStreamsData()
+	stream, err := c.getStreamsData(streams)
 	if err != nil {
 		return nil, err
 	}
@@ -293,7 +297,7 @@ func (c *ConfigMap) getConduitsData() ([]byte, error) {
 	return yaml.Marshal(lst)
 }
 
-func (c *ConfigMap) getStreamsData() ([]byte, error) {
+func (c *ConfigMap) getStreamsData(oldStreams []*reader.Stream) ([]byte, error) {
 	// get attractors with trench label
 	crs, err := c.listStreamsByLabel()
 	if err != nil {
@@ -305,12 +309,55 @@ func (c *ConfigMap) getStreamsData() ([]byte, error) {
 		if cr.Spec.Conduit == "" {
 			continue
 		}
-		lst.Streams = append(lst.Streams, &reader.Stream{
-			Name:    cr.ObjectMeta.Name,
-			Conduit: cr.Spec.Conduit,
-		})
+		var stream *reader.Stream
+		stream, oldStreams = c.getStream(cr.ObjectMeta.Name, cr.Spec.Conduit, oldStreams)
+		lst.Streams = append(lst.Streams, stream)
 	}
 	return yaml.Marshal(lst)
+}
+
+const (
+	identifierStart = 1
+	identifierRange = 100
+)
+
+func (c *ConfigMap) getStream(streamName string, conduitName string, oldStreams []*reader.Stream) (*reader.Stream, []*reader.Stream) {
+	for _, s := range oldStreams {
+		if s.Name == streamName && s.Conduit == conduitName {
+			return s, oldStreams
+		}
+	}
+	newStream := &reader.Stream{
+		Name:            streamName,
+		Conduit:         conduitName,
+		IdentifierRange: c.findRange(oldStreams),
+	}
+	oldStreams = append(oldStreams, newStream)
+	return newStream, oldStreams
+}
+
+func (c *ConfigMap) findRange(oldStreams []*reader.Stream) *reader.Range {
+	r := &reader.Range{
+		Start: identifierStart,
+		End:   identifierRange,
+	}
+	for {
+		if !c.overlappingRange(r, oldStreams) {
+			break
+		}
+		r.Start += identifierRange
+		r.End += identifierRange
+	}
+	return r
+}
+
+func (c *ConfigMap) overlappingRange(identifierRange *reader.Range, oldStreams []*reader.Stream) bool {
+	for _, s := range oldStreams {
+		if identifierRange.Start <= s.IdentifierRange.End && identifierRange.End >= s.IdentifierRange.Start {
+			return true
+		}
+	}
+	return false
 }
 
 func (c *ConfigMap) getFlowsData() ([]byte, error) {
