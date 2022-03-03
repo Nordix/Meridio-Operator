@@ -3,6 +3,7 @@ package common
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	corev1 "k8s.io/api/core/v1"
@@ -12,9 +13,10 @@ import (
 )
 
 const (
-	SAName                = "meridio-sa"
-	ResourceNamePrefixEnv = "RESOURCE_NAME_PREFIX"
-	ImagePullSecretEnv    = "IMAGE_PULL_SECRET"
+	SAName                 = "meridio-sa"
+	ResourceNamePrefixEnv  = "RESOURCE_NAME_PREFIX"
+	ImagePullSecretEnv     = "IMAGE_PULL_SECRET"
+	IdentifierRangeSizeEnv = "IDENTIFIER_RANGE_SIZE"
 
 	Registry        = "registry.nordix.org"
 	Organization    = "cloud-native/meridio"
@@ -49,6 +51,9 @@ const (
 	CMName      = "meridio-configuration"
 
 	NetworkServiceName = "external-vlan"
+
+	IdentifierStart            = 1
+	DefaultIdentifierRangeSize = 100
 )
 
 func ServiceAccountName(trench *meridiov1alpha1.Trench) string {
@@ -121,6 +126,14 @@ func VlanNtwkSvcName(cr *meridiov1alpha1.Trench) string {
 
 func getResourceNamePrefix() string {
 	return os.Getenv(ResourceNamePrefixEnv)
+}
+
+func GetIdentifierRangeSize() int {
+	IdentifierRangeSize, err := strconv.Atoi(os.Getenv(IdentifierRangeSizeEnv))
+	if err != nil {
+		return DefaultIdentifierRangeSize
+	}
+	return IdentifierRangeSize
 }
 
 func GetImagePullSecrets() []corev1.LocalObjectReference {

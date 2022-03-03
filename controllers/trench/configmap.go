@@ -316,11 +316,6 @@ func (c *ConfigMap) getStreamsData(oldStreams []*reader.Stream) ([]byte, error) 
 	return yaml.Marshal(lst)
 }
 
-const (
-	identifierStart = 1
-	identifierRange = 100
-)
-
 func (c *ConfigMap) getStream(streamName string, conduitName string, oldStreams []*reader.Stream) (*reader.Stream, []*reader.Stream) {
 	for _, s := range oldStreams {
 		if s.Name == streamName && s.Conduit == conduitName {
@@ -337,16 +332,18 @@ func (c *ConfigMap) getStream(streamName string, conduitName string, oldStreams 
 }
 
 func (c *ConfigMap) findRange(oldStreams []*reader.Stream) *reader.Range {
+	identifierStart := uint32(common.IdentifierStart)
+	identifierRangeSize := uint32(common.GetIdentifierRangeSize())
 	r := &reader.Range{
 		Start: identifierStart,
-		End:   identifierRange,
+		End:   identifierRangeSize,
 	}
 	for {
 		if !c.overlappingRange(r, oldStreams) {
 			break
 		}
-		r.Start += identifierRange
-		r.End += identifierRange
+		r.Start += identifierRangeSize
+		r.End += identifierRangeSize
 	}
 	return r
 }
