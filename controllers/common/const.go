@@ -123,6 +123,10 @@ func VlanNtwkSvcName(cr *meridiov1alpha1.Trench) string {
 	return strings.Join([]string{NetworkServiceName, cr.ObjectMeta.Name, cr.ObjectMeta.Namespace}, ".")
 }
 
+func GetPrefixedName(resourceName string) string {
+	return fmt.Sprintf("%s%s", getResourceNamePrefix(), resourceName)
+}
+
 func getResourceNamePrefix() string {
 	return os.Getenv(ResourceNamePrefixEnv)
 }
