@@ -2,6 +2,7 @@ package conduit
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 
 	meridiov1alpha1 "github.com/nordix/meridio-operator/api/v1alpha1"
@@ -70,8 +71,7 @@ func (i *Proxy) getEnvVars(allEnv []corev1.EnvVar) []corev1.EnvVar {
 		},
 		{
 			Name:  "NSM_NSP_SERVICE_NAME",
-			Value: common.NspSvcName,
-		},
+			Value: fmt.Sprintf("%s%s", os.Getenv(common.ResourceNamePrefixEnv), common.NspSvcName)},
 		{
 			Name:  "NSM_NSP_SERVICE_PORT",
 			Value: strconv.Itoa(common.NspTargetPort),
