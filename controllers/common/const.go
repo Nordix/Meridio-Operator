@@ -49,6 +49,9 @@ const (
 	CMName      = "meridio-configuration"
 
 	NetworkServiceName = "external-vlan"
+
+	ResourceRequirementKey          = "resource-template"
+	ResourceRequirementTemplatePath = "template/resource"
 )
 
 func ServiceAccountName(trench *meridiov1alpha1.Trench) string {
