@@ -513,6 +513,10 @@ github.com/networkservicemesh/sdk-sriov v1.4.0/go.mod h1:umjPum97SQsB96sCAgdfoTU
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
 github.com/nordix/meridio v0.6.0 h1:7lrJtnlALcmQrMCQiRwOu/2HaditLYqCNAUZiLwyWRc=
 github.com/nordix/meridio v0.6.0/go.mod h1:IN9Ix0rwV6xIaCNmGVb4zYA65CHzJhJ88yIyx2Wh814=
+github.com/nordix/meridio v0.6.1-0.20220616141914-3363db3754b5 h1:oiqqQrQibIFu6OzxctNfllGlr/BnqJS3DN12Wo1W6TY=
+github.com/nordix/meridio v0.6.1-0.20220616141914-3363db3754b5/go.mod h1:IN9Ix0rwV6xIaCNmGVb4zYA65CHzJhJ88yIyx2Wh814=
+github.com/nordix/meridio v0.6.1-0.20220616153744-72dbd78fb2a2 h1:13u8cPu2glntU9wN69s7VGGS2EvB2jV0cew1zCSNL6U=
+github.com/nordix/meridio v0.6.1-0.20220616153744-72dbd78fb2a2/go.mod h1:IN9Ix0rwV6xIaCNmGVb4zYA65CHzJhJ88yIyx2Wh814=
 github.com/nxadm/tail v1.4.4/go.mod h1:kenIhsEOeOJmVchQTgglprH7qJGnHDVpk1VPCcaMI8A=
 github.com/nxadm/tail v1.4.8 h1:nPr65rt6Y5JFSKQO7qToXr7pePgD6Gwiw05lkbyAQTE=
 github.com/nxadm/tail v1.4.8/go.mod h1:+ncqLTQzXmGhMZNUePPaPqPvBxHAIsmXswZKocGu+AU=

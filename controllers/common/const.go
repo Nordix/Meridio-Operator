@@ -3,6 +3,7 @@ package common
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	corev1 "k8s.io/api/core/v1"
@@ -17,6 +18,7 @@ const (
 	ImagePullSecretEnv    = "IMAGE_PULL_SECRET"
 	NSMRegistryServiceEnv = "NSM_REGISTRY_SERVICE"
 	LogLevelEnv           = "LOG_LEVEL"
+	MaxTargetsEnv         = "MAX_TARGETS"
 
 	Registry        = "registry.nordix.org"
 	Organization    = "cloud-native/meridio"
@@ -54,6 +56,8 @@ const (
 
 	ResourceRequirementKey          = "resource-template"
 	ResourceRequirementTemplatePath = "template/resource"
+
+	DefaultMaxTargets = 100
 )
 
 func ServiceAccountName(trench *meridiov1alpha1.Trench) string {
@@ -138,6 +142,14 @@ func GetNSMRegistryService() string {
 
 func GetLogLevel() string {
 	return os.Getenv(LogLevelEnv)
+}
+
+func GetMaxTargets() int {
+	maxTargets, err := strconv.Atoi(os.Getenv(MaxTargetsEnv))
+	if err != nil {
+		return DefaultMaxTargets
+	}
+	return maxTargets
 }
 
 func GetImagePullSecrets() []corev1.LocalObjectReference {
