@@ -1,0 +1,55 @@
+
+---
+apiVersion: meridio.nordix.org/v1alpha1
+kind: Attractor
+metadata:
+  name: attractor-a-1
+  labels:
+    trench: trench-a
+spec:
+  replicas: 2
+  composites:
+  - conduit-a-1
+  gateways:
+  - gateway-a-1
+  - gateway-a-2
+  vips:
+  - vip-a-1
+  - vip-a-2
+  - vip-a-3
+  - vip-a-4
+  interface:
+    name: ext-vlan0
+    ipv4-prefix: 169.254.100.0/24
+    ipv6-prefix: 100:100::/64
+    type: nsm-vlan
+    nsm-vlan:
+      vlan-id: 100
+      base-interface: eth0
+---
+apiVersion: meridio.nordix.org/v1alpha1
+kind: Flow
+metadata:
+  name: flow-a-1
+  labels:
+    trench: trench-a
+spec:
+  stream: stream-a-1
+  priority: 1
+  vips:
+  - vip-a-1
+  - vip-a-2
+  - vip-a-4
+  source-subnets:
+  - 0.0.0.0/0
+  - 0:0:0:0:0:0:0:0/0
+  source-ports:
+  - 1024-65535
+  destination-ports:
+  - "5000"
+  - "4000"
+  - "5003"
+  - "4003"
+  protocols:
+  - tcp
+  - udp

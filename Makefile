@@ -104,9 +104,11 @@ test: manifests generate fmt vet envtest ginkgo ## Run tests.
 	KUBEBUILDER_ASSETS="$(shell $(ENVTEST) use $(ENVTEST_K8S_VERSION) -p path)" go test -v ./... -short -coverprofile cover.out
 
 E2E_FOCUS?=""
+E2E_SCRIPT ?= "$(shell pwd)/test/e2e/data/kind/test.sh"
 .PHONY: e2e
 e2e: ginkgo
-	$(GINKGO) -v --focus=$(E2E_FOCUS) ./testdata/e2e/... -- -namespace=${NAMESPACE} -mutating=${ENABLE_MUTATING_WEBHOOK}
+	ginkgo -v --focus=$(E2E_FOCUS) ./test/e2e/... ./Meridio/test/e2e/... -- \
+		-script=${E2E_SCRIPT}
 
 ENVTEST = $(shell pwd)/bin/setup-envtest
 envtest: ## Download envtest-setup locally if necessary.
@@ -174,7 +176,7 @@ kustomize: ## Download kustomize locally if necessary.
 
 GINKGO = $(shell pwd)/bin/ginkgo
 ginkgo: ## Download ginkgo locally if necessary.
-	$(call go-get-tool,$(GINKGO),github.com/onsi/ginkgo/ginkgo@v1.16.5)
+	$(call go-get-tool,$(GINKGO),github.com/onsi/ginkgo/v2/ginkgo@v2.1.4)
 
 # go-get-tool will 'go get' any package $2 and install it to $1.
 PROJECT_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
