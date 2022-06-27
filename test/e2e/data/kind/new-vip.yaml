@@ -1,0 +1,9 @@
+---
+apiVersion: meridio.nordix.org/v1alpha1
+kind: Vip
+metadata:
+  name: vip-a-4
+  labels:
+    trench: trench-a
+spec:
+  address: "60.0.0.150/32"
