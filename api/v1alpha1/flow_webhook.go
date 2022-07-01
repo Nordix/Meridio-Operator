@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"net"
+	"strings"
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -116,6 +117,18 @@ func (r *Flow) validateFlow() error {
 	if r.Spec.Priority < 0 {
 		allErrs = append(allErrs, field.Invalid(field.NewPath("metadata").Child("spec").Child("priority"), r.Spec.Priority,
 			"priority must be larger than 0"))
+	}
+
+	if r.Spec.LocalPort != nil {
+		if len(r.Spec.DestinationPorts) != 1 {
+			allErrs = append(allErrs, field.Invalid(field.NewPath("metadata").Child("spec").Child("local-port"), r.Spec.LocalPort,
+				"if the local-port field is set, the destination-ports must contains one and only one entry"))
+		} else {
+			if strings.Contains(r.Spec.DestinationPorts[0], "-") {
+				allErrs = append(allErrs, field.Invalid(field.NewPath("metadata").Child("spec").Child("destination-ports"), r.Spec.DestinationPorts,
+					"if the local-port field is set, the destination-ports cannot be a port range"))
+			}
+		}
 	}
 
 	if len(allErrs) == 0 {

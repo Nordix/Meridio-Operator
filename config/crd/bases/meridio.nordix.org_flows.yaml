@@ -67,6 +67,12 @@ spec:
                 items:
                   type: string
                 type: array
+              local-port:
+                description: Port the application is listening on. This field is used
+                  for destination port NATting.
+                maximum: 65535
+                minimum: 1
+                type: integer
               priority:
                 description: Priority of the flow
                 format: int32

@@ -57,6 +57,13 @@ type FlowSpec struct {
 
 	// Priority of the flow
 	Priority int32 `json:"priority"`
+
+	// +kubebuilder:validation:Minimum=1
+	// +kubebuilder:validation:Maximum=65535
+	// Port the application is listening on.
+	// This field is used for destination port NATting.
+	// +optional
+	LocalPort *uint16 `json:"local-port,omitempty"`
 }
 
 // FlowStatus defines the observed state of Flow
