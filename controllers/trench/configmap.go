@@ -328,6 +328,7 @@ func (c *ConfigMap) getFlowsData() ([]byte, error) {
 
 		var srcPorts []string
 		var dstPorts []string
+		var localPort uint16 = 0
 		for _, p := range cr.Spec.SourcePorts {
 			if p == "any" {
 				srcPorts = append(srcPorts, "0-65535")
@@ -343,6 +344,10 @@ func (c *ConfigMap) getFlowsData() ([]byte, error) {
 				dstPorts = append(dstPorts, p)
 			}
 		}
+
+		if cr.Spec.LocalPort != nil {
+			localPort = *cr.Spec.LocalPort
+		}
 		lst.Flows = append(lst.Flows, &reader.Flow{
 			Name:                  cr.ObjectMeta.Name,
 			Stream:                cr.Spec.Stream,
@@ -352,6 +357,7 @@ func (c *ConfigMap) getFlowsData() ([]byte, error) {
 			Vips:                  cr.Spec.Vips,
 			Protocols:             meridiov1alpha1.TransportProtocolsToStrings(cr.Spec.Protocols),
 			Priority:              cr.Spec.Priority,
+			LocalPort:             localPort,
 		})
 	}
 	return yaml.Marshal(lst)
