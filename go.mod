@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/faisal-memon/sviddisk v0.0.0-20211007205134-77ccea0b9271
 	github.com/go-logr/logr v1.2.3
-	github.com/nordix/meridio v0.7.1
+	github.com/nordix/meridio v0.7.2-0.20220722131837-841f44297ca7
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.17.0
 	github.com/spiffe/go-spiffe/v2 v2.0.0
