@@ -58,7 +58,7 @@ const (
 	IpamSvcName             = "ipam-service"
 	NspSvcName              = "nsp-service"
 	PodDisruptionBudgetName = "pdb"
-	LBName                  = "lb-fe"
+	LBName                  = "stateless-lb-frontend"
 	ProxyName               = "proxy"
 	IpamName                = "ipam"
 	NseName                 = "nse-vlan"
