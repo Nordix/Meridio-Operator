@@ -21,6 +21,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
@@ -50,6 +51,7 @@ import (
 
 	"github.com/nordix/meridio-operator/controllers/version"
 	vipcontroller "github.com/nordix/meridio-operator/controllers/vip"
+	"github.com/nordix/meridio/pkg/profiling"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -131,6 +133,17 @@ func main() {
 	flag.Parse()
 
 	ctrl.SetLogger(zap.New(zap.UseFlagOptions(&opts)))
+
+	// if config.ProfilingEnabled {
+	go func() {
+		mux := http.NewServeMux()
+		profiling.AddProfilerHandlers(mux)
+		err := http.ListenAndServe(fmt.Sprintf(":%d", 9995), mux)
+		if err != nil {
+			setupLog.Error(err, "err starting profiling")
+		}
+	}()
+	// }
 
 	// Set operator scope to the namespace where the operator pod exists
 	// An empty value means the operator is running with cluster scope
