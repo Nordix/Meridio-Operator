@@ -4,13 +4,13 @@ apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   creationTimestamp: null
-  name: validating-webhook-configuration
+  name: operator-validating-webhook-configuration
 webhooks:
 - admissionReviewVersions:
   - v1
   clientConfig:
     service:
-      name: webhook-service
+      name: operator-webhook-service
       namespace: system
       path: /validate-meridio-nordix-org-v1alpha1-attractor
   failurePolicy: Fail
@@ -30,7 +30,7 @@ webhooks:
   - v1
   clientConfig:
     service:
-      name: webhook-service
+      name: operator-webhook-service
       namespace: system
       path: /validate-meridio-nordix-org-v1alpha1-conduit
   failurePolicy: Fail
@@ -50,7 +50,7 @@ webhooks:
   - v1
   clientConfig:
     service:
-      name: webhook-service
+      name: operator-webhook-service
       namespace: system
       path: /validate-meridio-nordix-org-v1alpha1-flow
   failurePolicy: Fail
@@ -70,7 +70,7 @@ webhooks:
   - v1
   clientConfig:
     service:
-      name: webhook-service
+      name: operator-webhook-service
       namespace: system
       path: /validate-meridio-nordix-org-v1alpha1-gateway
   failurePolicy: Fail
@@ -90,7 +90,7 @@ webhooks:
   - v1
   clientConfig:
     service:
-      name: webhook-service
+      name: operator-webhook-service
       namespace: system
       path: /validate-meridio-nordix-org-v1alpha1-stream
   failurePolicy: Fail
@@ -110,7 +110,7 @@ webhooks:
   - v1
   clientConfig:
     service:
-      name: webhook-service
+      name: operator-webhook-service
       namespace: system
       path: /validate-meridio-nordix-org-v1alpha1-trench
   failurePolicy: Fail
@@ -130,7 +130,7 @@ webhooks:
   - v1
   clientConfig:
     service:
-      name: webhook-service
+      name: operator-webhook-service
       namespace: system
       path: /validate-meridio-nordix-org-v1alpha1-vip
   failurePolicy: Fail

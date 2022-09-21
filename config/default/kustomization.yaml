@@ -43,5 +43,5 @@ vars:
   name: SERVICE_NAMESPACE
   objref:
     kind: Service
-    name: webhook-service
+    name: operator-webhook-service
     version: v1

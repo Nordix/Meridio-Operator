@@ -13,5 +13,5 @@ patches:
    group: admissionregistration.k8s.io
    version: v1
    kind: ValidatingWebhookConfiguration
-   name: validating-webhook-configuration
+   name: operator-validating-webhook-configuration
   path: patches/vwebhook_namespace_selector_patch.yaml

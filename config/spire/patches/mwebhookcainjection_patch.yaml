@@ -2,6 +2,6 @@
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
-  name: mutating-webhook-configuration
+  name: operator-mutating-webhook-configuration
   labels:
     spiffe.io/webhook: "true"

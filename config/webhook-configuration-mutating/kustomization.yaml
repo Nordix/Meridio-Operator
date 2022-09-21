@@ -13,5 +13,5 @@ patches:
    group: admissionregistration.k8s.io
    version: v1
    kind: MutatingWebhookConfiguration
-   name: mutating-webhook-configuration
+   name: operator-mutating-webhook-configuration
   path: patches/mwebhook_namespace_selector_patch.yaml
