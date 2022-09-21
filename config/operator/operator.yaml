@@ -3,20 +3,20 @@ kind: Namespace
 metadata:
   labels:
     kubernetes.io/metadata.name: $(SERVICE_NAMESPACE)
-    control-plane: controller-manager
+    control-plane: meridio-operator
   name: system
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: controller-manager
+  name: operator
   namespace: system
   labels:
-    control-plane: controller-manager
+    control-plane: meridio-operator
 spec:
   selector:
     matchLabels:
-      control-plane: controller-manager
+      control-plane: meridio-operator
   strategy:
     rollingUpdate:
       maxSurge: 0
@@ -26,7 +26,7 @@ spec:
   template:
     metadata:
       labels:
-        control-plane: controller-manager
+        control-plane: meridio-operator
     spec:
       securityContext:
         runAsNonRoot: true
@@ -86,5 +86,5 @@ spec:
         volumeMounts:
         - mountPath: /deployment
           name: templates-volume
-      serviceAccountName: controller-manager
+      serviceAccountName: meridio-operator
       terminationGracePeriodSeconds: 10
