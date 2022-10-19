@@ -93,11 +93,19 @@ spec:
                         description: (immutable) master interface of the vlan interface
                           to be used for external connectivity
                         type: string
+                      mtu:
+                        description: (immutable) mtu of the interface that will be
+                          injected
+                        maximum: 65535
+                        minimum: 68
+                        type: integer
                       vlan-id:
                         description: (immutable) vlan ID of the vlan interface to
                           be used for external connectivity
                         format: int32
                         type: integer
+                    required:
+                    - mtu
                     type: object
                   type:
                     default: nsm-vlan

@@ -54,11 +54,17 @@ func NewNSE(e *common.Executor, attr *meridiov1alpha1.Attractor, t *meridiov1alp
 }
 
 func (i *NseDeployment) getEnvVars(allEnv []corev1.EnvVar) []corev1.EnvVar {
+	mtu := ""
+	if i.attractor.Spec.Interface.NSMVlan.MTU != nil {
+		mtu = fmt.Sprintf("; mtu: %d ", *i.attractor.Spec.Interface.NSMVlan.MTU)
+	}
 	operatorEnv := map[string]string{
-		"NSM_SERVICES": fmt.Sprintf("%s { vlan: %d; via: %s }",
+		"NSM_SERVICES": fmt.Sprintf("%s { vlan: %d; via: %s %s}",
 			common.VlanNtwkSvcName(i.attractor, i.trench),
 			*i.attractor.Spec.Interface.NSMVlan.VlanID,
-			i.attractor.Spec.Interface.NSMVlan.BaseInterface),
+			i.attractor.Spec.Interface.NSMVlan.BaseInterface,
+			mtu,
+		),
 		"NSM_CONNECT_TO":  common.GetNSMRegistryService(),
 		"NSM_CIDR_PREFIX": fmt.Sprintf("%v,%v", i.attractor.Spec.Interface.PrefixIPv4, i.attractor.Spec.Interface.PrefixIPv6),
 		"NSM_LOG_LEVEL":   common.GetLogLevel(),
