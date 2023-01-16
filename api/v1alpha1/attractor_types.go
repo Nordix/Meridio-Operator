@@ -69,6 +69,11 @@ type NSMVlanSpec struct {
 
 	// (immutable) vlan ID of the vlan interface to be used for external connectivity
 	VlanID *int32 `json:"vlan-id,omitempty"`
+
+	// (immutable) mtu of the interface that will be injected
+	// +kubebuilder:validation:Minimum=68
+	// +kubebuilder:validation:Maximum=65535
+	MTU *uint16 `json:"mtu"`
 }
 
 // AttractorStatus defines the observed state of Attractor
